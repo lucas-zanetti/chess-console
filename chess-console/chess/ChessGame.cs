@@ -6,15 +6,15 @@ namespace chess
     {
         public Board Board { get; private set; }
         public bool GameOver { get; private set; }
-        private int turn;
-        private Color currentPlayer;
+        public int Turn { get; private set; }
+        public Color CurrentPlayer { get; private set; }
 
         public ChessGame()
         {
             Board = new Board(8, 8);
             GameOver = false;
-            turn = 1;
-            currentPlayer = Color.White;
+            Turn = 1;
+            CurrentPlayer = Color.White;
             AddPieces();
         }
 
@@ -24,6 +24,31 @@ namespace chess
             p.IncreaseMoveQuantity();
             Piece takenPiece = Board.RemovePiece(end);
             Board.AddPiece(p, end);
+        }
+
+        public void ExecutePlay(Position start, Position end)
+        {
+            DoMovement(start, end);
+            Turn++;
+            SwitchPlayer();
+        }
+
+        public void ValidateStartPosition(Position pos)
+        {
+            if (Board.Piece(pos) == null) throw new BoardException("There is no piece in chosen start position!");
+            if (CurrentPlayer != Board.Piece(pos).Color) throw new BoardException("The chosen piece doesn't belongs to the current player!");
+            if (!Board.Piece(pos).ExistsPossibleMoviments()) throw new BoardException("There are no possible moviments for the chosen piece!");
+        }
+
+        public void ValidateEndPosition(Position start, Position end)
+        {
+            if (!Board.Piece(start).CanMoveTo(end)) throw new BoardException("Invalid end position!");
+        }
+
+        private void SwitchPlayer()
+        {
+            if (CurrentPlayer == Color.White) CurrentPlayer = Color.Black;
+            else CurrentPlayer = Color.White;
         }
 
         private void AddPieces()
