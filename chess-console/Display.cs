@@ -15,6 +15,7 @@ namespace chess_console
             Console.WriteLine("Turn: " + game.Turn);
             Console.WriteLine("Waiting play: " + game.CurrentPlayer);
             Console.WriteLine();
+            if (game.Check) Console.WriteLine("CHECK!");
         }
 
         public static void DisplayTakenPieces(ChessGame game)
