@@ -1,10 +1,43 @@
 ﻿using board;
 using chess;
+using System.Collections.Generic;
 
 namespace chess_console
 {
     internal class Display
     {
+        public static void DisplayGame(ChessGame game)
+        {
+            DisplayBoard(game.Board);
+            Console.WriteLine();
+            DisplayTakenPieces(game);
+            Console.WriteLine();
+            Console.WriteLine("Turn: " + game.Turn);
+            Console.WriteLine("Waiting play: " + game.CurrentPlayer);
+            Console.WriteLine();
+        }
+
+        public static void DisplayTakenPieces(ChessGame game)
+        {
+            Console.WriteLine("Taken pieces:");
+            Console.Write("White: ");
+            DisplaySet(game.TakenPieces(Color.White));
+            Console.WriteLine();
+            Console.Write("Black: ");
+            ConsoleColor defaultColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            DisplaySet(game.TakenPieces(Color.Black));
+            Console.ForegroundColor = defaultColor;
+            Console.WriteLine();
+        }
+
+        public static void DisplaySet(HashSet<Piece> piecesSet)
+        {
+            Console.Write("[ ");
+            foreach (Piece piece in piecesSet) Console.Write(piece + " ");
+            Console.Write("]");
+        }
+
         public static void DisplayBoard(Board board)
         {
             for (int i = 0; i < board.Rows; i++)

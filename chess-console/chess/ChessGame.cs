@@ -1,4 +1,5 @@
 ﻿using board;
+using System.Collections.Generic;
 
 namespace chess
 {
@@ -8,6 +9,8 @@ namespace chess
         public bool GameOver { get; private set; }
         public int Turn { get; private set; }
         public Color CurrentPlayer { get; private set; }
+        private HashSet<Piece> _pieces;
+        private HashSet<Piece> _taken;
 
         public ChessGame()
         {
@@ -15,7 +18,9 @@ namespace chess
             GameOver = false;
             Turn = 1;
             CurrentPlayer = Color.White;
-            AddPieces();
+            _pieces = new HashSet<Piece>();
+            _taken = new HashSet<Piece>();
+            AddPieces();            
         }
 
         public void DoMovement(Position start, Position end)
@@ -24,6 +29,7 @@ namespace chess
             p.IncreaseMoveQuantity();
             Piece takenPiece = Board.RemovePiece(end);
             Board.AddPiece(p, end);
+            if(takenPiece != null) _taken.Add(takenPiece);
         }
 
         public void ExecutePlay(Position start, Position end)
@@ -51,21 +57,48 @@ namespace chess
             else CurrentPlayer = Color.White;
         }
 
+        public HashSet<Piece> TakenPieces(Color color)
+        {
+            HashSet<Piece> result = new HashSet<Piece>();
+            foreach(Piece piece in _taken)
+            {
+                if(piece.Color == color) result.Add(piece);
+            }
+            return result;
+        }
+
+        public HashSet<Piece> PiecesInGame(Color color)
+        {
+            HashSet<Piece> result = new HashSet<Piece>();
+            foreach (Piece piece in _pieces)
+            {
+                if (piece.Color == color) result.Add(piece);
+            }
+            result.ExceptWith(TakenPieces(color));
+            return result;
+        }
+
+        public void AddNewPiece(char column, int row, Piece piece)
+        {
+            Board.AddPiece(piece, new ChessPosition(column, row).ToPosition());
+            _pieces.Add(piece);
+        }
+
         private void AddPieces()
         {
-            Board.AddPiece(new Rook(Board, Color.Black), new ChessPosition('c', 1).ToPosition());
-            Board.AddPiece(new King(Board, Color.Black), new ChessPosition('d', 1).ToPosition());
-            Board.AddPiece(new Rook(Board, Color.Black), new ChessPosition('e', 1).ToPosition());
-            Board.AddPiece(new Rook(Board, Color.Black), new ChessPosition('c', 2).ToPosition());
-            Board.AddPiece(new Rook(Board, Color.Black), new ChessPosition('d', 2).ToPosition());
-            Board.AddPiece(new Rook(Board, Color.Black), new ChessPosition('e', 2).ToPosition());
+            AddNewPiece('c', 1, new Rook(Board, Color.Black));
+            AddNewPiece('d', 1, new King(Board, Color.Black));
+            AddNewPiece('e', 1, new Rook(Board, Color.Black));
+            AddNewPiece('c', 2, new Rook(Board, Color.Black));
+            AddNewPiece('d', 2, new Rook(Board, Color.Black));
+            AddNewPiece('e', 2, new Rook(Board, Color.Black));
 
-            Board.AddPiece(new Rook(Board, Color.White), new ChessPosition('c', 8).ToPosition());
-            Board.AddPiece(new King(Board, Color.White), new ChessPosition('d', 8).ToPosition());
-            Board.AddPiece(new Rook(Board, Color.White), new ChessPosition('e', 8).ToPosition());
-            Board.AddPiece(new Rook(Board, Color.White), new ChessPosition('c', 7).ToPosition());
-            Board.AddPiece(new Rook(Board, Color.White), new ChessPosition('d', 7).ToPosition());
-            Board.AddPiece(new Rook(Board, Color.White), new ChessPosition('e', 7).ToPosition());
+            AddNewPiece('c', 7, new Rook(Board, Color.White));
+            AddNewPiece('d', 7, new King(Board, Color.White));
+            AddNewPiece('e', 7, new Rook(Board, Color.White));
+            AddNewPiece('c', 8, new Rook(Board, Color.White));
+            AddNewPiece('d', 8, new Rook(Board, Color.White));
+            AddNewPiece('e', 8, new Rook(Board, Color.White));
         }
     }
 }

@@ -16,11 +16,7 @@ namespace chess_console
                     try
                     {
                         Console.Clear();
-                        Display.DisplayBoard(game.Board);
-
-                        Console.WriteLine();
-                        Console.WriteLine("Turn: " + game.Turn);
-                        Console.WriteLine("Waiting play: " + game.CurrentPlayer);
+                        Display.DisplayGame(game);
 
                         Console.Write("Type start position: ");
                         Position start = Display.ReadChessPosition().ToPosition();
