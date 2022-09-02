@@ -12,5 +12,12 @@ namespace chess
         {
             return "P";
         }
+
+        public override bool[,] PossibleMovements()
+        {
+            bool[,] matrix = new bool[Board.Rows, Board.Cols];
+            Position pos = new Position(0, 0);
+            return matrix;
+        }
     }
 }
