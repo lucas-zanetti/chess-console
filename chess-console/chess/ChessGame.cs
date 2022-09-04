@@ -166,12 +166,41 @@ namespace chess
 
         private void AddPieces()
         {
-            AddNewPiece('c', 1, new Rook(Board, Color.White));
-            AddNewPiece('d', 1, new King(Board, Color.White));
-            AddNewPiece('h', 7, new Rook(Board, Color.White));
+            //White Pieces
+            AddNewPiece('a', 1, new Rook(Board, Color.White));
+            AddNewPiece('b', 1, new Knight(Board, Color.White));
+            AddNewPiece('c', 1, new Bishop(Board, Color.White));
+            AddNewPiece('d', 1, new Queen(Board, Color.White));
+            AddNewPiece('e', 1, new King(Board, Color.White));
+            AddNewPiece('f', 1, new Bishop(Board, Color.White));
+            AddNewPiece('g', 1, new Knight(Board, Color.White));
+            AddNewPiece('h', 1, new Rook(Board, Color.White));
+            AddNewPiece('a', 2, new Pawn(Board, Color.White));
+            AddNewPiece('b', 2, new Pawn(Board, Color.White));
+            AddNewPiece('c', 2, new Pawn(Board, Color.White));
+            AddNewPiece('d', 2, new Pawn(Board, Color.White));
+            AddNewPiece('e', 2, new Pawn(Board, Color.White));
+            AddNewPiece('f', 2, new Pawn(Board, Color.White));
+            AddNewPiece('g', 2, new Pawn(Board, Color.White));
+            AddNewPiece('h', 2, new Pawn(Board, Color.White));
 
-            AddNewPiece('a', 8, new King(Board, Color.Black));
-            AddNewPiece('b', 8, new Rook(Board, Color.Black));
+            //Black Pieces
+            AddNewPiece('a', 8, new Rook(Board, Color.White));
+            AddNewPiece('b', 8, new Knight(Board, Color.White));
+            AddNewPiece('c', 8, new Bishop(Board, Color.White));
+            AddNewPiece('d', 8, new Queen(Board, Color.White));
+            AddNewPiece('e', 8, new King(Board, Color.White));
+            AddNewPiece('f', 8, new Bishop(Board, Color.White));
+            AddNewPiece('g', 8, new Knight(Board, Color.White));
+            AddNewPiece('h', 8, new Rook(Board, Color.White));
+            AddNewPiece('a', 7, new Pawn(Board, Color.White));
+            AddNewPiece('b', 7, new Pawn(Board, Color.White));
+            AddNewPiece('c', 7, new Pawn(Board, Color.White));
+            AddNewPiece('d', 7, new Pawn(Board, Color.White));
+            AddNewPiece('e', 7, new Pawn(Board, Color.White));
+            AddNewPiece('f', 7, new Pawn(Board, Color.White));
+            AddNewPiece('g', 7, new Pawn(Board, Color.White));
+            AddNewPiece('h', 7, new Pawn(Board, Color.White));
         }
     }
 }
