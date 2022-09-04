@@ -43,17 +43,23 @@ namespace chess
                 UndoMovement(start, end, takenPiece);
                 throw new BoardException("Player can't put his King in check condition!");
             }
+
             if (IsCheck(OpponentColor(CurrentPlayer))) Check = true;
             else Check = false;
-            Turn++;
-            SwitchPlayer();
+
+            if (IsMate(OpponentColor(CurrentPlayer))) GameOver = true;
+            else
+            {
+                Turn++;
+                SwitchPlayer();
+            }
         }
 
         public void UndoMovement(Position start, Position end, Piece takenPiece)
         {
             Piece p = Board.RemovePiece(end);
             p.DecreaseMoveQuantity();
-            if(takenPiece != null)
+            if (takenPiece != null)
             {
                 Board.AddPiece(takenPiece, end);
                 _taken.Remove(takenPiece);
@@ -127,6 +133,31 @@ namespace chess
             return false;
         }
 
+        public bool IsMate(Color color)
+        {
+            if (!IsCheck(color)) return false;
+            foreach (Piece p in PiecesInGame(color))
+            {
+                bool[,] mat = p.PossibleMovements();
+                for (int i = 0; i < Board.Rows; i++)
+                {
+                    for (int j = 0; j < Board.Cols; j++)
+                    {
+                        if (mat[i, j])
+                        {
+                            Position start = p.Position;
+                            Position end = new Position(i, j);
+                            Piece takenPiece = DoMovement(start, end);
+                            bool checkTest = IsCheck(color);
+                            UndoMovement(start, end, takenPiece);
+                            if (!checkTest) return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
         public void AddNewPiece(char column, int row, Piece piece)
         {
             Board.AddPiece(piece, new ChessPosition(column, row).ToPosition());
@@ -135,19 +166,12 @@ namespace chess
 
         private void AddPieces()
         {
-            AddNewPiece('c', 1, new Rook(Board, Color.Black));
-            AddNewPiece('d', 1, new King(Board, Color.Black));
-            AddNewPiece('e', 1, new Rook(Board, Color.Black));
-            AddNewPiece('c', 2, new Rook(Board, Color.Black));
-            AddNewPiece('d', 2, new Rook(Board, Color.Black));
-            AddNewPiece('e', 2, new Rook(Board, Color.Black));
+            AddNewPiece('c', 1, new Rook(Board, Color.White));
+            AddNewPiece('d', 1, new King(Board, Color.White));
+            AddNewPiece('h', 7, new Rook(Board, Color.White));
 
-            AddNewPiece('c', 7, new Rook(Board, Color.White));
-            AddNewPiece('d', 7, new Rook(Board, Color.White));
-            AddNewPiece('e', 7, new Rook(Board, Color.White));
-            AddNewPiece('c', 8, new Rook(Board, Color.White));
-            AddNewPiece('d', 8, new King(Board, Color.White));
-            AddNewPiece('e', 8, new Rook(Board, Color.White));
+            AddNewPiece('a', 8, new King(Board, Color.Black));
+            AddNewPiece('b', 8, new Rook(Board, Color.Black));
         }
     }
 }

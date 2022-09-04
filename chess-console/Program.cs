@@ -40,6 +40,8 @@ namespace chess_console
                         Console.ReadLine();
                     }
                 }
+                Console.Clear();
+                Display.DisplayGame(game);
             }
             catch (BoardException e)
             {

@@ -13,9 +13,17 @@ namespace chess_console
             DisplayTakenPieces(game);
             Console.WriteLine();
             Console.WriteLine("Turn: " + game.Turn);
-            Console.WriteLine("Waiting play: " + game.CurrentPlayer);
-            Console.WriteLine();
-            if (game.Check) Console.WriteLine("CHECK!");
+            if (!game.GameOver)
+            {
+                Console.WriteLine("Waiting play: " + game.CurrentPlayer);
+                Console.WriteLine();
+                if (game.Check) Console.WriteLine("CHECK!");
+            }
+            else
+            {
+                Console.WriteLine("CHECKMATE!");
+                Console.WriteLine("Winner: " + game.CurrentPlayer);
+            }
         }
 
         public static void DisplayTakenPieces(ChessGame game)
