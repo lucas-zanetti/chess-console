@@ -32,6 +32,27 @@ namespace chess
             Piece takenPiece = Board.RemovePiece(end);
             Board.AddPiece(p, end);
             if (takenPiece != null) _taken.Add(takenPiece);
+
+            //#Special Play Castle Kingside
+            if (p is King && end.Column == start.Column + 2)
+            {
+                Position startRook = new Position(start.Row, start.Column + 3);
+                Position endRook = new Position(start.Row, start.Column + 1);
+                Piece rook = Board.RemovePiece(startRook);
+                rook.IncreaseMoveQuantity();
+                Board.AddPiece(rook, endRook);
+            }
+
+            //#Special Play Castle Queenside
+            if (p is King && end.Column == start.Column - 2)
+            {
+                Position startRook = new Position(start.Row, start.Column - 4);
+                Position endRook = new Position(start.Row, start.Column - 1);
+                Piece rook = Board.RemovePiece(startRook);
+                rook.IncreaseMoveQuantity();
+                Board.AddPiece(rook, endRook);
+            }
+
             return takenPiece;
         }
 
@@ -65,6 +86,26 @@ namespace chess
                 _taken.Remove(takenPiece);
             }
             Board.AddPiece(p, start);
+
+            //#Special Play Castle Kingside
+            if (p is King && end.Column == start.Column + 2)
+            {
+                Position startRook = new Position(start.Row, start.Column + 3);
+                Position endRook = new Position(start.Row, start.Column + 1);
+                Piece rook = Board.RemovePiece(endRook);
+                rook.DecreaseMoveQuantity();
+                Board.AddPiece(rook, startRook);
+            }
+
+            //#Special Play Castle Queenside
+            if (p is King && end.Column == start.Column - 2)
+            {
+                Position startRook = new Position(start.Row, start.Column - 4);
+                Position endRook = new Position(start.Row, start.Column - 1);
+                Piece rook = Board.RemovePiece(endRook);
+                rook.DecreaseMoveQuantity();
+                Board.AddPiece(rook, startRook);
+            }
         }
 
         public void ValidateStartPosition(Position pos)
@@ -124,7 +165,7 @@ namespace chess
         public bool IsCheck(Color color)
         {
             Piece king = King(color);
-            if (king == null) throw new BoardException($"There is no {color} King int he board!");
+            if (king == null) throw new BoardException($"There is no {color} King in the board!");
             foreach (Piece p in PiecesInGame(OpponentColor(color)))
             {
                 bool[,] mat = p.PossibleMovements();
@@ -171,7 +212,7 @@ namespace chess
             AddNewPiece('b', 1, new Knight(Board, Color.White));
             AddNewPiece('c', 1, new Bishop(Board, Color.White));
             AddNewPiece('d', 1, new Queen(Board, Color.White));
-            AddNewPiece('e', 1, new King(Board, Color.White));
+            AddNewPiece('e', 1, new King(Board, Color.White, this));
             AddNewPiece('f', 1, new Bishop(Board, Color.White));
             AddNewPiece('g', 1, new Knight(Board, Color.White));
             AddNewPiece('h', 1, new Rook(Board, Color.White));
@@ -185,22 +226,22 @@ namespace chess
             AddNewPiece('h', 2, new Pawn(Board, Color.White));
 
             //Black Pieces
-            AddNewPiece('a', 8, new Rook(Board, Color.White));
-            AddNewPiece('b', 8, new Knight(Board, Color.White));
-            AddNewPiece('c', 8, new Bishop(Board, Color.White));
-            AddNewPiece('d', 8, new Queen(Board, Color.White));
-            AddNewPiece('e', 8, new King(Board, Color.White));
-            AddNewPiece('f', 8, new Bishop(Board, Color.White));
-            AddNewPiece('g', 8, new Knight(Board, Color.White));
-            AddNewPiece('h', 8, new Rook(Board, Color.White));
-            AddNewPiece('a', 7, new Pawn(Board, Color.White));
-            AddNewPiece('b', 7, new Pawn(Board, Color.White));
-            AddNewPiece('c', 7, new Pawn(Board, Color.White));
-            AddNewPiece('d', 7, new Pawn(Board, Color.White));
-            AddNewPiece('e', 7, new Pawn(Board, Color.White));
-            AddNewPiece('f', 7, new Pawn(Board, Color.White));
-            AddNewPiece('g', 7, new Pawn(Board, Color.White));
-            AddNewPiece('h', 7, new Pawn(Board, Color.White));
+            AddNewPiece('a', 8, new Rook(Board, Color.Black));
+            AddNewPiece('b', 8, new Knight(Board, Color.Black));
+            AddNewPiece('c', 8, new Bishop(Board, Color.Black));
+            AddNewPiece('d', 8, new Queen(Board, Color.Black));
+            AddNewPiece('e', 8, new King(Board, Color.Black, this));
+            AddNewPiece('f', 8, new Bishop(Board, Color.Black));
+            AddNewPiece('g', 8, new Knight(Board, Color.Black));
+            AddNewPiece('h', 8, new Rook(Board, Color.Black));
+            AddNewPiece('a', 7, new Pawn(Board, Color.Black));
+            AddNewPiece('b', 7, new Pawn(Board, Color.Black));
+            AddNewPiece('c', 7, new Pawn(Board, Color.Black));
+            AddNewPiece('d', 7, new Pawn(Board, Color.Black));
+            AddNewPiece('e', 7, new Pawn(Board, Color.Black));
+            AddNewPiece('f', 7, new Pawn(Board, Color.Black));
+            AddNewPiece('g', 7, new Pawn(Board, Color.Black));
+            AddNewPiece('h', 7, new Pawn(Board, Color.Black));
         }
     }
 }
