@@ -80,6 +80,21 @@ namespace chess
                 throw new BoardException("Player can't put his King in check condition!");
             }
 
+            Piece p = Board.Piece(end);
+
+            //#Special Play Promotion
+            if (p is Pawn)
+            {
+                if ((p.Color == Color.White && end.Row == 0) || (p.Color == Color.Black && end.Row == 7))
+                {
+                    p = Board.RemovePiece(end);
+                    _pieces.Remove(p);
+                    Piece queen = new Queen(Board, p.Color);
+                    Board.AddPiece(queen, end);
+                    _pieces.Add(queen);
+                }
+            }
+
             if (IsCheck(OpponentColor(CurrentPlayer))) Check = true;
             else Check = false;
 
@@ -91,7 +106,6 @@ namespace chess
             }
 
             //#Special Play 'En Passant'
-            Piece p = Board.Piece(end);
             if (p is Pawn && (end.Row == start.Row - 2 || end.Row == start.Row + 2)) EligibleEnPassant = p;
             else EligibleEnPassant = null;
         }
